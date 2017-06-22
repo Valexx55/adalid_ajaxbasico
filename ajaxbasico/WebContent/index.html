@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script>
+var xmlHttp = new XMLHttpRequest();
+
+function obtenerSaludo ()
+{
+	console.log ("toca el botón");
+	xmlHttp.onreadystatechange = procesarRespuesta;
+	xmlHttp.open ('GET','ObtenerSaludo', true);
+	xmlHttp.send (null);
+}
+function procesarRespuesta ()
+{
+	if (xmlHttp.readyState==4)
+		{
+		console.log ("respuesta recibida");
+		if (xmlHttp.status==200)
+			{
+				console.log ("respuesta OK");
+				//alert (" He recibido " + xmlHttp.responseText);
+				var saludo = xmlHttp.responseText;
+				var caja_texto = document.getElementById ("cajatexto");
+				caja_texto.value = saludo;
+			} else 
+				{
+					alert (" Respuesta servidor KO");
+				}
+		} else {
+			console.log ("readyState = "+xmlHttp.readyState);
+		}
+}
+</script>
+</head>
+<body>
+<input type="text" id="cajatexto"><br>
+<input type="button" value="GET saludo" 
+onclick="obtenerSaludo();">
+</body>
+</html>
