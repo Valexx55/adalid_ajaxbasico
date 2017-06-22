@@ -1,8 +1,7 @@
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,20 +10,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import dni.Dni;
-
 /**
- * Servlet implementation class DniAjax
+ * Servlet implementation class PersonaAjax
  */
-@WebServlet("/DniAjax")
-public class DniAjax extends HttpServlet {
+@WebServlet("/PersonaAjax")
+public class PersonaAjax extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	//http://localhost:9090/ajaxbasico/DniAjax?dni=50995992
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DniAjax() {
+    public PersonaAjax() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,26 +30,7 @@ public class DniAjax extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		String dni = request.getParameter("dni");
-		int dni_int = Integer.parseInt(dni);
-		char letra = Dni.calculaLetra(dni_int);
-		
-		InfoDni info_dni = new InfoDni();
-		info_dni.setLetra(letra);
-		info_dni.setNumero(dni_int);
-		
-		Gson gson = new Gson ();
-		String dni_json = gson.toJson(info_dni);
-		
-		PrintWriter pw = response.getWriter();
-		pw.write(dni_json);
-		response.setContentType("application/json");
-		
-		
-
-		
-		
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -61,7 +38,16 @@ public class DniAjax extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		//doGet(request, response);
+		BufferedReader br = request.getReader();
+		String personajson = br.readLine();
+		System.out.println("JSON persona " + personajson);
+		
+		Gson gson = new Gson ();
+		Persona p = gson.fromJson (personajson, Persona.class);
+		
+		System.out.println("Nombre = " + p.getNombre());
+		System.out.println("Edad = " + p.getEdad());
 	}
 
 }

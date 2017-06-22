@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script>
+var xmlHttp = new XMLHttpRequest();
+
+function enviarPersona ()
+{
+	console.log ("toca el botón");
+	xmlHttp.onreadystatechange = procesarRespuesta;
+	
+	var c_nombre = document.getElementById ("nombre").value;
+	var c_edad = document.getElementById ("edad").value;
+	
+	var persona = {
+			nombre:c_nombre,
+			edad:c_edad
+	};
+	
+	var persona_json = JSON.stringify (persona);
+	
+	xmlHttp.open ('POST','PersonaAjax', true);
+	xmlHttp.send (persona_json);
+}
+function procesarRespuesta ()
+{
+	if (xmlHttp.readyState==4)
+		{
+		console.log ("respuesta recibida");
+		if (xmlHttp.status==200)
+			{
+				console.log ("respuesta OK");
+				//alert (" He recibido " + xmlHttp.responseText);
+				var info_dni = JSON.parse (xmlHttp.responseText);
+				alert ("NUMERO " + info_dni.numero);
+				alert ("LETRA " + info_dni.letra);
+				
+				var caja_texto = document.getElementById ("cajatexto");
+				caja_texto.value = info_dni.numero +" - " +info_dni.letra;
+			} else 
+				{
+					//alert (" Respuesta servidor KO");
+				console.log ("Respuesta servidor KO");
+				}
+		} else {
+			console.log ("readyState = "+xmlHttp.readyState);
+		}
+}
+</script>
+</head>
+<body style="text-align: center">
+<label for="nombre">NOMBRE</label>
+<input type="text" id="nombre"><br>
+<label for="edad">EDAD</label>
+<input type="text" id="edad"><br>
+<input type="button" value="Enviar Persona" 
+onclick="enviarPersona();">
+</body>
+</html>

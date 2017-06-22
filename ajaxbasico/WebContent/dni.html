@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script>
+var xmlHttp = new XMLHttpRequest();
+
+function calculaDNI ()
+{
+	console.log ("toca el botón");
+	xmlHttp.onreadystatechange = procesarRespuesta;
+	var dni_user = document.getElementById ("cajatexto").value;
+	xmlHttp.open ('GET','DniAjax?dni='+dni_user, true);
+	xmlHttp.send (null);
+}
+function procesarRespuesta ()
+{
+	if (xmlHttp.readyState==4)
+		{
+		console.log ("respuesta recibida");
+		if (xmlHttp.status==200)
+			{
+				console.log ("respuesta OK");
+				alert (" He recibido " + xmlHttp.responseText);
+				var info_dni = JSON.parse (xmlHttp.responseText);
+				alert ("NUMERO " + info_dni.numero);
+				alert ("LETRA " + info_dni.letra);
+				
+				var caja_texto = document.getElementById ("cajatexto");
+				caja_texto.value = info_dni.numero +" - " +info_dni.letra;
+			} else 
+				{
+					alert (" Respuesta servidor KO");
+				}
+		} else {
+			console.log ("readyState = "+xmlHttp.readyState);
+		}
+}
+</script>
+</head>
+<body>
+<input type="text" id="cajatexto"><br>
+<input type="button" value="Calcula DNI" 
+onclick="calculaDNI();">
+</body>
+</html>
